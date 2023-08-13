@@ -2,29 +2,22 @@
 
 #General Directory Declarations
 START_DIR=$PWD
-INSTALL_DIR=/etc/uctronics
-UC_INSTALLER_DIR=/etc/uctronics/uctronics-lcd-installer
-UC_REPO_DIR=/etc/uctronics/SKU_RM0004
-UC_BAK_DIR=/etc/uctronics/backup
+INSTALL_DIR=/etc/kalivnc
+BAK_DIR=/etc/kalivnc/backups
 SCRIPTS_DIR=/usr/bin
-CONFIG=/boot/config.txt
-CONFIG_BAK=/etc/uctronics/backup/config.txt.bak
-MODULES=/etc/modules
-MODULES_BAK=/etc/uctronics/backup/modules.bak
-UNINSTALL=/usr/bin/uctronics-lcd-uninstaller
-UNINSTALL_BAK=/etc/uctronics/uctronics-lcd-installer/uctronics-lcd-uninstaller
-STARTUP=/usr/bin/uctronics-lcd-startup
-STARTUP_BAK=/etc/uctronics/uctronics-lcd-installer/uctronics-lcd-startup
-SYSTEMD=/etc/systemd/system/uctronics-lcd.service
-SYSTEMD_BAK=/etc/uctronics/uctronics-lcd-installer/uctronics-lcd.service
+KALIVNC_DIR=/etc/kalivnc/rpi-kalivnc-installer
+UNINSTALL=/usr/bin/rpi-kalivnc-uninstaller
+UNINSTALL_BAK=/etc/kalivnc/rpi-kalivnc-installer/rpi-kalivnc-uninstaller
+INITD=/etc/init.d/vncserver
+INITD_BAK=/etc/kalivnc/rpi-kalivnc-installer/vncserver
+INITD_BAK_DIR=/etc/kalivnc/backups/vncserver.bak
+XSTARTUP=/home/kali/.vnc/xstartup
+XSTARTUP_BAK=/etc/kalivnc/rpi-kalivnc-installer/xstartup
+XSTARTUP_BAK_DIR=/etc/kalivnc/backups/xstartup.bak
 
 #URL Declarations
-UC_GIT_URL=https://github.com/UCTRONICS/SKU_RM0004.git
-INSTALLER_GIT_URL=https://github.com/xXNightstalkerXx/uctronics-lcd-installer.git
-INSTALLER_WGET_URL=https://raw.github.com/xXNightstalkerXx/uctronics-lcd-installer/master/uctronics-lcd-installer
-
-#I2C Interface Setting
-I2C_SETTING=on
+INSTALLER_GIT_URL=https://github.com/xXNightstalkerXx/rpi-kalivnc-installer.git
+INSTALLER_WGET_URL=https://raw.github.com/xXNightstalkerXx/rpi-kalivnc-installer/master/rpi-kalivnc-installer
 
 #Color Declarations
 std=`tput setaf 15`
@@ -44,7 +37,7 @@ echo "${blue}   ////////////       //       /////////     //       ////////////$
 echo "${blue}            //       //       //      //    //                 //${std}"
 echo "${blue}           //       //       //       //   //                 //${std}"
 echo "${blue}////////////       //       //        //  //       ////////////${std}"
-echo "UCTronics Status LCD Installer by Nightstalker"
+echo "Kali X11 VNC Installer by Nightstalker"
 echo ""
 echo ""
 echo "${blue}Checking OS...${std}"
@@ -53,55 +46,13 @@ os_type=${os_type#*=}
 
 if [[ "$os_type" == *"Kali"* ]]
 then
-	INSTALL_OPTIONS=1
 	echo ""
 	echo "$os_type"
-elif [[ "$os_type" == *"Raspbian"* ]]
-then
-	if [[ $(cat /boot/issue.txt) == *"stage2"* ]]
-	then
-		INSTALL_OPTIONS=2
-		echo ""
-		echo "$os_type"
-		echo " Lite Version"
-	elif [[ $(cat /boot/issue.txt) == *"stage4"* ]]
-	then
-		INSTALL_OPTIONS=3
-		echo ""
-		echo "$os_type"
-		echo " GUI Lite Version"
-	elif [[ $(cat /boot/issue.txt) == *"stage5"* ]]
-	then
-		INSTALL_OPTIONS=3
-		echo ""
-		echo "$os_type"
-		echo " GUI Full Version"
-	else
-		INSTALL_OPTIONS=2
-		echo ""
-		echo "$os_type"
-		echo " Unknown Raspbian"
-		echo " Using Lite Version Install Options!"
-	fi
 else
 	echo ""
 	echo "${red}Wrong Operating System detected! Aborting the Installation!${std}"
 	sleep 1
 	exit 1
-fi
-
-if [[ $INSTALL_OPTIONS -eq 1 ]]
-then
-	#OS Specific Directory Declarations
-	BLACKLIST=/etc/modprobe.d/kalipi-blacklist.conf
-elif [[ $INSTALL_OPTIONS -eq 2 ]]
-then
-	#OS Specific Directory Declarations
-	BLACKLIST=/etc/modprobe.d/raspi-blacklist.conf
-elif [[ $INSTALL_OPTIONS -eq 3 ]]
-then
-	#OS Specific Directory Declarations
-	BLACKLIST=/etc/modprobe.d/raspi-blacklist.conf
 fi
 
 echo ""
@@ -163,14 +114,14 @@ else
 fi
 
 echo "${blue}Checking Backup Directory...${std}"
-echo "$UC_BAK_DIR"
+echo "$BAK_DIR"
 
-if [ -d "$UC_BAK_DIR" ]
+if [ -d "$BAK_DIR" ]
 then
     	echo "${red}Backup Directory exists. Not Creating this Directory!${std}"
 else
     	echo "${blue}Backup Directory doesn't exist. Creating the Directory!${std}"
-	sudo mkdir -p $UC_BAK_DIR
+	sudo mkdir -p $BAK_DIR
 fi
 
 echo ""
@@ -194,111 +145,42 @@ echo ""
 echo "${blue}Git is installed and okay! Continuing Installation!${std}"
 sleep 1
 
-if [[ $INSTALL_OPTIONS -eq 1 ]]
-then
-	echo ""
-	echo ""
-	echo "${blue}Checking if DTParam is installed...${std}"
-	if hash dtparam 2>/dev/null
-	then
-		echo ""
-        	echo "${blue}DTParam is already installed!${std}"
-	else
-		echo ""
-        	echo "${red}DTParam is not installed. Installing it now!${std}"
-		sudo apt-get install libraspberrypi-bin -y
-		sleep 1
-	fi
-	echo ""
-	echo "${blue}DTParam is installed and okay! Continuing Installation!${std}"
-	sleep 1
-fi
-
 echo ""
 echo ""
-echo "${blue}Installing the official UCTronics Repository...${std}"
+echo "${blue}Creating Backups of ${INITD} and ${XSTARTUP} ...${std}"
 echo ""
-echo "${blue}Switching into the Installation Directory...${std}"
-echo "$INSTALL_DIR"
-cd $INSTALL_DIR
-echo "${blue}Downloading the UCTronics Repository...${std}"
-sudo git clone $UC_GIT_URL
-echo ""
-echo "${blue}Installation of the UCTronics Repository completed! Continuing the Installation!${std}"
-sleep 1
-
-echo ""
-echo ""
-echo "${blue}Installing the UCTRONICS-LCD-INSTALLER Repository...${std}"
-echo ""
-echo "${blue}Downloading the UCTRONICS-LCD-INSTALLER Repository...${std}"
-sudo git clone $INSTALLER_GIT_URL
-echo "${blue}Switching into the UCTRONICS-LCD-INSTALLER Directory...${std}"
-echo "$UC_INSTALLER_DIR"
-cd $UC_INSTALLER_DIR
-echo "${blue}Making the UCTRONICS-LCD-INSTALLER Scripts executable...${std}"
-sudo chmod 0755 uctronics-lcd-installer
-sudo chmod 0755 uctronics-lcd-uninstaller
-sudo chmod 0755 uctronics-lcd-startup
-echo "${blue}Copying the uctronics-lcd-uninstaller Script into $SCRIPTS_DIR ...${std}"
-sudo cp $UNINSTALL_BAK $UNINSTALL
-echo "${blue}Copying the uctronics-lcd-startup Script into $SCRIPTS_DIR ...${std}"
-sudo cp $STARTUP_BAK $STARTUP
-echo "${blue}Installation of the UCTRONICS-LCD-INSTALLER Repository completed! Continuing the Installation!${std}"
-sleep 1
-
-echo ""
-echo ""
-echo "${blue}Creating Backups of ${CONFIG} and ${MODULES} ...${std}"
-echo ""
-echo "${blue}Copying ${CONFIG} to ${CONFIG_BAK} ...${std}"
-sudo cp $CONFIG $CONFIG_BAK
-echo "${blue}Copying ${MODULES} to ${MODULES_BAK} ...${std}"
-sudo cp $MODULES $MODULES_BAK
+echo "${blue}Copying ${INITD} to ${INITD_BAK_DIR} ...${std}"
+sudo cp $INITD $INITD_BAK_DIR
+echo "${blue}Copying ${XSTARTUP} to ${XSTARTUP_BAK_DIR} ...${std}"
+sudo cp $XSTARTUP $XSTARTUP_BAK_DIR
 echo ""
 echo "${blue}Backups created! Continuing the Installation!${std}"
 sleep 1
 
 echo ""
 echo ""
-echo "${blue}Setting up the I2C Interface ...${std}"
+echo "${blue}Installing the RPI-KALIVNC-INSTALLER Repository...${std}"
 echo ""
-echo "${blue}Changing the I2C dtparam in the ${CONFIG} to ${I2C_SETTING} and adding baudrate settings...${std}"
-echo "dtparam=i2c_arm=${I2C_SETTING},i2c_arm_baudrate=400000"
-sudo sed -i "s/^dtparam=i2c_arm=.*/dtparam=i2c_arm=${I2C_SETTING},i2c_arm_baudrate=400000/" $CONFIG
-sudo sed -i "s/^#dtparam=i2c_arm=.*/dtparam=i2c_arm=${I2C_SETTING},i2c_arm_baudrate=400000/" $CONFIG
-echo "${blue}Adjusting ${BLACKLIST} and /etc/modules ...${std}"
-
-if ! [ -e $BLACKLIST ]
-then
-	sudo touch $BLACKLIST
-fi
-
-sudo sed $BLACKLIST -i -e "s/^\(blacklist[[:space:]]*i2c[-_]bcm2708\)/#\1/"
-sudo sed /etc/modules -i -e "s/^#[[:space:]]*\(i2c[-_]dev\)/\1/"
-
-if ! grep -q "^i2c[-_]dev" /etc/modules
-then
-	printf "i2c-dev\n" | sudo tee -a /etc/modules
-fi
-
-echo "${blue}Switching the I2C dtparam to ${I2C_SETTING} ...${std}"
-sudo dtparam i2c_arm=$I2C_SETTING
-echo "${blue}Loading the I2C Kernel Module...${std}"
-sudo modprobe i2c-dev
-
-echo ""
-echo "${blue}I2C Interface Setup is completed! Continuing the Installation!${std}"
-sleep 1
-
-echo ""
-echo ""
-echo "${blue}Enabling ON/OFF Switch support...${std}"
-echo ""
-echo "${blue}Adding necessary lines at ${CONFIG} ...${std}"
-echo "dtoverlay=gpio-shutdown,gpio_pin=4,active_low=1,gpio_pull=up" | sudo tee -a $CONFIG
-echo ""
-echo "${blue}ON/OFF Switch support enabled! Continuing the Installation!${std}"
+echo "${blue}Switching into the Installation Directory...${std}"
+echo "$INSTALL_DIR"
+cd $INSTALL_DIR
+echo "${blue}Downloading the RPI-KALIVNC-INSTALLER Repository...${std}"
+sudo git clone $INSTALLER_GIT_URL
+echo "${blue}Switching into the RPI-KALIVNC-INSTALLER Directory...${std}"
+echo "$KALIVNC_DIR"
+cd $KALIVNC_DIR
+echo "${blue}Making the RPI-KALIVNC-INSTALLER Scripts executable...${std}"
+sudo chmod 0755 rpi-kalivnc-installer
+sudo chmod 0755 rpi-kalivnc-uninstaller
+sudo chmod 0755 xstartup
+sudo chmod 0755 vncserver
+echo "${blue}Copying the rpi-kalivnc-uninstaller Script into $SCRIPTS_DIR ...${std}"
+sudo cp $UNINSTALL_BAK $UNINSTALL
+echo "${blue}Copying the xstartup Script into $XSTARTUP ...${std}"
+sudo cp $XSTARTUP_BAK $XSTARTUP
+echo "${blue}Copying the vncserver Script into $INITD ...${std}"
+sudo cp $INITD_BAK $INITD
+echo "${blue}Installation of the RPI-KALIVNC-INSTALLER Repository completed! Continuing the Installation!${std}"
 sleep 1
 
 echo ""
