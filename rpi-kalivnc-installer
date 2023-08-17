@@ -115,7 +115,7 @@ else
 	sudo mkdir -p $INSTALL_DIR
 fi
 
-echo ""${blue}Checking Backup Directory...${std}"
+echo "${blue}Checking Backup Directory...${std}"
 echo "$BACKUP_DIR"
 
 if [ -d "$BACKUP_DIR" ]
