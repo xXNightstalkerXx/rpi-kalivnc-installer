@@ -4,7 +4,8 @@ The Installer creates a new Directory where this Repository get's downloaded int
 
 After downloading the necessary Files it will setup the VNC Server and ask you for a Password to secure your VNC Server.
 
-The Installer also creates a backup of the /etc/init.d/vncserver and /home/kali/.vnc/xstartup Files before changing them!
+The Installer also creates a backup of the /home/kali/.vnc/xstartup File before changing them.
+When launching the uninstall Script the /.vnc Folder will get deleted again
 
 I'm not an expert Coder so use this Repo on your own Risk and don't blame me if you have to reinstall your Raspberry.
 
