@@ -3,17 +3,14 @@
 #General Directory Declarations
 START_DIR=$PWD
 INSTALL_DIR=/etc/kalivnc
-BAK_DIR=/etc/kalivnc/backups
 SCRIPTS_DIR=/usr/bin
 KALIVNC_DIR=/etc/kalivnc/rpi-kalivnc-installer
 UNINSTALL=/usr/bin/rpi-kalivnc-uninstaller
 UNINSTALL_BAK=/etc/kalivnc/rpi-kalivnc-installer/rpi-kalivnc-uninstaller
 INITD=/etc/init.d/vncserver
 INITD_BAK=/etc/kalivnc/rpi-kalivnc-installer/vncserver
-INITD_BAK_DIR=/etc/kalivnc/backups/vncserver.bak
 XSTARTUP=/home/kali/.vnc/xstartup
 XSTARTUP_BAK=/etc/kalivnc/rpi-kalivnc-installer/xstartup
-XSTARTUP_BAK_DIR=/etc/kalivnc/backups/xstartup.bak
 
 #URL Declarations
 INSTALLER_GIT_URL=https://github.com/xXNightstalkerXx/rpi-kalivnc-installer.git
@@ -30,13 +27,13 @@ blue=`tput setaf 27 bold`
 #Main Script
 echo ""
 echo ""
-echo "${blue}   ${std}"
-echo "${blue}   ${std}"
-echo "${blue}   ${std}"
-echo "${blue}   ${std}"
-echo "${blue}   ${std}"
-echo "${blue}   ${std}"
-echo "${blue}   ${std}"
+echo "${blue}//      //   ///     //   //////////${std}"
+echo "${blue}//     //   ////    //   //${std}"
+echo "${blue}//    //   // //   //   //${std}"
+echo "${blue}//   //   //  //  //   //${std}"
+echo "${blue}//  //   //   // //   //${std}"
+echo "${blue}// //   //    ////   //${std}"
+echo "${blue}////   //     ///   ///////////${std}"
 echo "Kali X11 VNC Installer by Nightstalker"
 echo ""
 echo ""
@@ -113,17 +110,6 @@ else
 	sudo mkdir -p $INSTALL_DIR
 fi
 
-echo "${blue}Checking Backup Directory...${std}"
-echo "$BAK_DIR"
-
-if [ -d "$BAK_DIR" ]
-then
-    	echo "${red}Backup Directory exists. Not Creating this Directory!${std}"
-else
-    	echo "${blue}Backup Directory doesn't exist. Creating the Directory!${std}"
-	sudo mkdir -p $BAK_DIR
-fi
-
 echo ""
 echo "${blue}Directories are okay! Continuing the Installation!${std}"
 sleep 1
@@ -164,18 +150,6 @@ sleep 1
 
 echo ""
 echo ""
-echo "${blue}Creating Backups of ${INITD} and ${XSTARTUP} ...${std}"
-echo ""
-echo "${blue}Copying ${INITD} to ${INITD_BAK_DIR} ...${std}"
-sudo cp $INITD $INITD_BAK_DIR
-echo "${blue}Copying ${XSTARTUP} to ${XSTARTUP_BAK_DIR} ...${std}"
-sudo cp $XSTARTUP $XSTARTUP_BAK_DIR
-echo ""
-echo "${blue}Backups created! Continuing the Installation!${std}"
-sleep 1
-
-echo ""
-echo ""
 echo "${blue}Installing the RPI-KALIVNC-INSTALLER Repository...${std}"
 echo ""
 echo "${blue}Switching into the Installation Directory...${std}"
@@ -193,10 +167,6 @@ sudo chmod 0755 xstartup
 sudo chmod 0755 vncserver
 echo "${blue}Copying the rpi-kalivnc-uninstaller Script into $SCRIPTS_DIR ...${std}"
 sudo cp $UNINSTALL_BAK $UNINSTALL
-echo "${blue}Copying the xstartup Script into $XSTARTUP ...${std}"
-sudo cp $XSTARTUP_BAK $XSTARTUP
-echo "${blue}Copying the vncserver Script into $INITD ...${std}"
-sudo cp $INITD_BAK $INITD
 echo ""
 echo "${blue}Installation of the RPI-KALIVNC-INSTALLER Repository completed! Continuing the Installation!${std}"
 sleep 1
@@ -208,6 +178,10 @@ echo ""
 echo "${green}Please enter a Password for the VNC Connection in the next step!${std}"
 echo "${green}The Password may have a maximum of 8 Characters! (VNC Server restriction)${std}"
 vncserver
+echo "${blue}Copying the xstartup Script into $XSTARTUP ...${std}"
+sudo cp $XSTARTUP_BAK $XSTARTUP
+echo "${blue}Copying the vncserver Script into $INITD ...${std}"
+sudo cp $INITD_BAK $INITD
 echo "${blue}Refreshing default Scripts...${std}"
 sudo update-rc.d vncserver defaults
 echo ""
