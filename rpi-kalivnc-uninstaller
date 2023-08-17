@@ -34,7 +34,7 @@ echo "${blue}//   //   //  //  //   //${std}"
 echo "${blue}//  //   //   // //   //${std}"
 echo "${blue}// //   //    ////   //${std}"
 echo "${blue}////   //     ///   ///////////${std}"
-echo "Kali X11 VNC Installer by Nightstalker"
+echo "Kali X11 VNC Uninstaller by Nightstalker"
 echo ""
 echo ""
 echo "${blue}Checking OS...${std}"
@@ -58,47 +58,6 @@ sleep 1
 
 echo ""
 echo ""
-echo "${blue}Updating Repository List...${std}"
-
-sudo apt-get update
-
-echo ""
-echo "${blue}Repository List updated! Continuing Installation!${std}"
-sleep 1
-
-echo ""
-echo ""
-echo "${green}It is highly recommended to update your OS before Installation!${std}"
-echo "${green}Do you want to update your OS?${std}"
-
-echo ""
-read -p "${green}Yes (y)/ No (n): ${std}" n;
-
-while ! [[ "$n" =~ ^(y|n)$ ]];
-do
-        echo ""
-        echo "${red}Wrong Input! Please type 'y' for 'YES' or 'n' for 'NO'!${std}"
-        read -p "Yes (y)/ No (n): " n;
-done
-
-if [[ "$n" =~ ^(y)$ ]];
-then
-        echo ""
-        echo "${blue}Updating the OS now...${std}"
-
-	sudo apt-get upgrade -y
-
-        echo ""
-        echo "${blue}Operating System updated successfully! Continuing the Installation!${std}"
-        sleep 1
-else
-        echo ""
-        echo "${red}Not updating your OS! Installation might fail!${std}"
-	sleep 1
-fi
-
-echo ""
-echo ""
 echo "${blue}Checking Installation Directory...${std}"
 echo "$INSTALL_DIR"
 
@@ -112,23 +71,6 @@ fi
 
 echo ""
 echo "${blue}Directories are okay! Continuing the Installation!${std}"
-sleep 1
-
-echo ""
-echo ""
-echo "${blue}Checking if Git is installed...${std}"
-if hash git 2>/dev/null
-then
-	echo ""
-        echo "${blue}Git is already installed!${std}"
-else
-	echo ""
-        echo "${red}Git is not installed. Installing Git now!${std}"
-	sudo apt-get install git -y
-	sleep 1
-fi
-echo ""
-echo "${blue}Git is installed and okay! Continuing Installation!${std}"
 sleep 1
 
 echo ""
