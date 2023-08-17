@@ -32,20 +32,12 @@ The Installer does the rest of the Job for you now.
 ----------------------------------------------------------------
 # HOW TO USE
 
-    sudo systemctl start uctronics-lcd
-Will start the uctronics-lcd service and activate the Status LCD until reboot
+After Installation your VNC Server will spin up automagically after every boot.
+To connect just type in the IP-Adress of your Kali Pi into your VNC Viewer followed
+by a ":1"
 
-    sudo systemctl stop uctronics-lcd
-Will stop the uctronics-lcd service and deactivate the Status LCD
-
-    sudo systemctl enable uctronics-lcd
-Enables the automatic startup of the Status LCD after boot
-
-    sudo systemctl disable uctronics-lcd
-Disables the automatic startup of the Status LCD after boot
-
-    uctronics-lcd-uninstaller
-Will revert all changes to /etc/modules, /boot/config.txt and systemd and switch off the I2C Interface.
+    rpi-kalivnc-uninstaller
+Will revert all changes made to your system.
 Also delete's all associated Files.
 
 ----------------------------------------------------------------
