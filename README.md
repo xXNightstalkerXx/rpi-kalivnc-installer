@@ -32,9 +32,11 @@ The Installer does the rest of the Job for you now.
 ----------------------------------------------------------------
 # HOW TO USE
 
-After Installation your VNC Server will spin up automagically after every boot.
+After Installation your VNC Server will spin up automagically after every boot. </br>
 To connect just type the IP-Adress of your Kali Pi into your VNC Viewer followed
-by a ":1"
+by a ":1" </br>
+You will also need the Password you entered during Installation to connect. </br>
+</br>
 
     rpi-kalivnc-uninstaller
 Will revert all changes made to your system.
