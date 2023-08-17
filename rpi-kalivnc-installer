@@ -147,6 +147,23 @@ sleep 1
 
 echo ""
 echo ""
+echo "${blue}Checking if X11VNC is installed...${std}"
+if hash x11vnc 2>/dev/null
+then
+	echo ""
+        echo "${blue}X11VNC is already installed!${std}"
+else
+	echo ""
+        echo "${red}X11VNC is not installed. Installing it now!${std}"
+	sudo apt-get install x11vnc -y
+	sleep 1
+fi
+echo ""
+echo "${blue}X11VNC is installed and okay! Continuing Installation!${std}"
+sleep 1
+
+echo ""
+echo ""
 echo "${blue}Creating Backups of ${INITD} and ${XSTARTUP} ...${std}"
 echo ""
 echo "${blue}Copying ${INITD} to ${INITD_BAK_DIR} ...${std}"
@@ -180,23 +197,21 @@ echo "${blue}Copying the xstartup Script into $XSTARTUP ...${std}"
 sudo cp $XSTARTUP_BAK $XSTARTUP
 echo "${blue}Copying the vncserver Script into $INITD ...${std}"
 sudo cp $INITD_BAK $INITD
+echo ""
 echo "${blue}Installation of the RPI-KALIVNC-INSTALLER Repository completed! Continuing the Installation!${std}"
 sleep 1
 
 echo ""
 echo ""
-echo "${blue}Configuring the systemd LCD Service for automatic startup...${std}"
+echo "${blue}Setting up the VNC Server...${std}"
 echo ""
-echo "${blue}Copying ${SYSTEMD_BAK} to ${SYSTEMD}...${std}"
-sudo cp $SYSTEMD_BAK $SYSTEMD
-echo "${blue}Reloading the systemd Services...${std}"
-sudo systemctl daemon-reload
-echo "${blue}Starting the LCD Service...${std}"
-sudo systemctl start uctronics-lcd
-echo "${blue}Enabling the LCD Service for automatic startup at boot...${std}"
-sudo systemctl enable uctronics-lcd
+echo "${green}Please enter a Password for the VNC Connection in the next step!${std}"
+echo "${green}The Password may have a maximum of 8 Characters! (VNC Server restriction)${std}"
+vncserver
+echo "${blue}Refreshing default Scripts...${std}"
+sudo update-rc.d vncserver defaults
 echo ""
-echo "${blue}Systemd Service enabled! Continuing the Installation!${std}"
+echo "${blue}VNC Server setup completed! Continuing the Installation!${std}"
 sleep 1
 
 echo ""
@@ -205,7 +220,7 @@ echo "${blue}Cleaning up the Installation...${std}"
 echo ""
 echo "${blue}Checking if I'm executed within my GIT Directory...${std}"
 echo "$START_DIR"
-if [[ $START_DIR == *"uctronics-lcd-installer" ]]
+if [[ $START_DIR == *"rpi-kalivnc-installer" ]]
 then
 	echo ""
 	echo "${yellow}It seems I'm executed within my GIT Directory.${std}"
@@ -222,5 +237,5 @@ else
 	echo "${red}Please reboot after the Installation!${std}"
     	echo "${blue}Installation Complete! Good Bye!${std}"
 	echo ""
-    	sudo rm $START_DIR"/uctronics-lcd-installer"
+    	sudo rm $START_DIR"/rpi-kalivnc-installer"
 fi
