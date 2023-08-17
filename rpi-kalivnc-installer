@@ -6,6 +6,7 @@ INSTALL_DIR=/etc/kalivnc
 BACKUP_DIR=/etc/kalivnc/backups
 SCRIPTS_DIR=/usr/bin
 KALIVNC_DIR=/etc/kalivnc/rpi-kalivnc-installer
+VNC_SERVER_DIR=/home/kali/.vnc
 UNINSTALL=/usr/bin/rpi-kalivnc-uninstaller
 UNINSTALL_BAK=/etc/kalivnc/rpi-kalivnc-installer/rpi-kalivnc-uninstaller
 INITD=/etc/init.d/vncserver
