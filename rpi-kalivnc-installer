@@ -102,9 +102,9 @@ fi
 
 echo ""
 echo ""
-
+echo "${blue}Checking Directories...${std}"
 echo ""
-echo ""${blue}Checking Installation Directory...${std}"
+echo "${blue}Checking Installation Directory...${std}"
 echo "$INSTALL_DIR"
 
 if [ -d "$INSTALL_DIR" ]
