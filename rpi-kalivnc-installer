@@ -3,14 +3,17 @@
 #General Directory Declarations
 START_DIR=$PWD
 INSTALL_DIR=/etc/kalivnc
+BACKUP_DIR=/etc/kalivnc/backups
 SCRIPTS_DIR=/usr/bin
 KALIVNC_DIR=/etc/kalivnc/rpi-kalivnc-installer
 UNINSTALL=/usr/bin/rpi-kalivnc-uninstaller
 UNINSTALL_BAK=/etc/kalivnc/rpi-kalivnc-installer/rpi-kalivnc-uninstaller
 INITD=/etc/init.d/vncserver
 INITD_BAK=/etc/kalivnc/rpi-kalivnc-installer/vncserver
+INITD_BAK_DIR=/etc/kalivnc/backups/vncserver.bak
 XSTARTUP=/home/kali/.vnc/xstartup
 XSTARTUP_BAK=/etc/kalivnc/rpi-kalivnc-installer/xstartup
+XSTARTUP_BAK_DIR=/etc/kalivnc/backups/xstartup.bak
 
 #URL Declarations
 INSTALLER_GIT_URL=https://github.com/xXNightstalkerXx/rpi-kalivnc-installer.git
@@ -99,7 +102,9 @@ fi
 
 echo ""
 echo ""
-echo "${blue}Checking Installation Directory...${std}"
+echo "${blue}Checking Directories...${std}"
+echo ""
+echo ""${blue}Checking Installation Directory...${std}"
 echo "$INSTALL_DIR"
 
 if [ -d "$INSTALL_DIR" ]
@@ -108,6 +113,17 @@ then
 else
     	echo "${blue}Installation Directory doesn't exist. Creating the Directory!${std}"
 	sudo mkdir -p $INSTALL_DIR
+fi
+
+echo ""${blue}Checking Backup Directory...${std}"
+echo "$BACKUP_DIR"
+
+if [ -d "$BACKUP_DIR" ]
+then
+    	echo "${red}Backup Directory exists. Not Creating this Directory!${std}"
+else
+    	echo "${blue}Backup Directory doesn't exist. Creating the Directory!${std}"
+	sudo mkdir -p $BACKUP_DIR
 fi
 
 echo ""
@@ -178,9 +194,12 @@ echo ""
 echo "${green}Please enter a Password for the VNC Connection in the next step!${std}"
 echo "${green}The Password may have a maximum of 8 Characters! (VNC Server restriction)${std}"
 vncserver
-echo "${blue}Copying the xstartup Script into $XSTARTUP ...${std}"
+echo "${blue}Creating a Backup of $XSTARTUP and $INITD ...${std}"
+sudo cp $XSTARTUP $XSTARTUP_BAK_DIR
+sudo cp $INITD $INITD_BAK_DIR
+echo "${blue}Copying $XSTARTUP_BAK to $XSTARTUP ...${std}"
 sudo cp $XSTARTUP_BAK $XSTARTUP
-echo "${blue}Copying the vncserver Script into $INITD ...${std}"
+echo "${blue}Copying $INITD_BAK to $INITD ...${std}"
 sudo cp $INITD_BAK $INITD
 echo "${blue}Refreshing default Scripts...${std}"
 sudo update-rc.d vncserver defaults
