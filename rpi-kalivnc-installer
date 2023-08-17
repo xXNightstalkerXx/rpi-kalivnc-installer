@@ -191,7 +191,7 @@ echo ""
 echo ""
 echo "${blue}Setting up the VNC Server...${std}"
 echo ""
-echo "${green}Please enter a Password for the VNC Connection in the next step!${std}"
+echo "Please enter a Password for the VNC Connection in the next step!${std}"
 echo "${green}The Password may have a maximum of 8 Characters! (VNC Server restriction)${std}"
 vncserver
 echo "${blue}Creating a Backup of $XSTARTUP and $INITD ...${std}"
