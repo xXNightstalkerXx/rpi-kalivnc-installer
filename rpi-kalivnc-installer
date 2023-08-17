@@ -10,7 +10,6 @@ UNINSTALL=/usr/bin/rpi-kalivnc-uninstaller
 UNINSTALL_BAK=/etc/kalivnc/rpi-kalivnc-installer/rpi-kalivnc-uninstaller
 INITD=/etc/init.d/vncserver
 INITD_BAK=/etc/kalivnc/rpi-kalivnc-installer/vncserver
-INITD_BAK_DIR=/etc/kalivnc/backups/vncserver.bak
 XSTARTUP=/home/kali/.vnc/xstartup
 XSTARTUP_BAK=/etc/kalivnc/rpi-kalivnc-installer/xstartup
 XSTARTUP_BAK_DIR=/etc/kalivnc/backups/xstartup.bak
@@ -194,9 +193,8 @@ echo ""
 echo "${green}Please enter a Password for the VNC Connection in the next step!${std}"
 echo "${green}The Password may have a maximum of 8 Characters! (VNC Server restriction)${std}"
 vncserver
-echo "${blue}Creating a Backup of $XSTARTUP and $INITD ...${std}"
+echo "${blue}Creating a Backup of $XSTARTUP ...${std}"
 sudo cp $XSTARTUP $XSTARTUP_BAK_DIR
-sudo cp $INITD $INITD_BAK_DIR
 echo "${blue}Copying $XSTARTUP_BAK to $XSTARTUP ...${std}"
 sudo cp $XSTARTUP_BAK $XSTARTUP
 echo "${blue}Copying $INITD_BAK to $INITD ...${std}"
