@@ -42,6 +42,16 @@ You will also need the Password you entered during Installation to connect. </br
     rpi-kalivnc-uninstaller
 Will revert all changes made to your system.
 Also delete's all associated Files.
+</br>
+</br>
+</br>
+ATTENTION!!</br>
+</br>
+DO NOT install Kali VNC with the RPI-KALIVNC-AUTOINSTALLER and use the RPI-KALIVNC-INSTALLER</br>
+instead!!</br>
+</br>
+The RPI-KALIVNC-AUTOINSTALLER is just meant to be used by my RPI-SETUP-TOOL!</br>
+
 
 ----------------------------------------------------------------
 ----------------------------------------------------------------
