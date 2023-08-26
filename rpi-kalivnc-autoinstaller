@@ -1,0 +1,175 @@
+#! /bin/bash
+
+#General Directory Declarations
+START_DIR=$PWD
+INSTALL_DIR=/etc/kalivnc
+BACKUP_DIR=/etc/kalivnc/backups
+SCRIPTS_DIR=/usr/bin
+KALIVNC_DIR=/etc/kalivnc/rpi-kalivnc-installer
+VNC_SERVER_DIR=/home/kali/.vnc
+UNINSTALL=/usr/bin/rpi-kalivnc-uninstaller
+UNINSTALL_BAK=/etc/kalivnc/rpi-kalivnc-installer/rpi-kalivnc-uninstaller
+INITD=/etc/init.d/vncserver
+INITD_BAK=/etc/kalivnc/rpi-kalivnc-installer/vncserver
+XSTARTUP=/home/kali/.vnc/xstartup
+XSTARTUP_BAK=/etc/kalivnc/rpi-kalivnc-installer/xstartup
+XSTARTUP_BAK_DIR=/etc/kalivnc/backups/xstartup.bak
+
+#URL Declarations
+INSTALLER_GIT_URL=https://github.com/xXNightstalkerXx/rpi-kalivnc-installer.git
+INSTALLER_WGET_URL=https://raw.github.com/xXNightstalkerXx/rpi-kalivnc-installer/master/rpi-kalivnc-installer
+
+#Color Declarations
+std=$(tput setaf 15)
+red=$(tput setaf 9 bold)
+green=$(tput setaf 10 bold)
+yellow=$(tput setaf 11 bold)
+pink=$(tput setaf 57)
+blue=$(tput setaf 27 bold)
+
+#Main Script
+echo ""
+echo ""
+echo "${blue}//      //   ///     //   //////////${std}"
+echo "${blue}//     //   ////    //   //${std}"
+echo "${blue}//    //   // //   //   //${std}"
+echo "${blue}//   //   //  //  //   //${std}"
+echo "${blue}//  //   //   // //   //${std}"
+echo "${blue}// //   //    ////   //${std}"
+echo "${blue}////   //     ///   ///////////${std}"
+echo "Kali X11 VNC Installer by Nightstalker"
+echo ""
+echo ""
+echo "${blue}Checking OS...${std}"
+os_type="$(grep -E '^(NAME)=' /etc/os-release)"
+os_type=${os_type#*=}
+
+if [[ "$os_type" == *"Kali"* ]]
+then
+	echo ""
+	echo "$os_type"
+else
+	echo ""
+	echo "${red}Wrong Operating System detected! Aborting the Installation!${std}"
+	sleep 1
+	exit 1
+fi
+
+echo ""
+echo "${blue}Operating System okay! Continuing the Installation!${std}"
+sleep 1
+
+echo ""
+echo ""
+echo "${blue}Checking Directories...${std}"
+echo ""
+echo "${blue}Checking Installation Directory...${std}"
+echo "$INSTALL_DIR"
+
+if [ -d "$INSTALL_DIR" ]
+then
+	echo "${red}Installation Directory exists. Not Creating this Directory!${std}"
+else
+	echo "${blue}Installation Directory doesn't exist. Creating the Directory!${std}"
+	sudo mkdir -p $INSTALL_DIR
+fi
+
+echo "${blue}Checking Backup Directory...${std}"
+echo "$BACKUP_DIR"
+
+if [ -d "$BACKUP_DIR" ]
+then
+	echo "${red}Backup Directory exists. Not Creating this Directory!${std}"
+else
+	echo "${blue}Backup Directory doesn't exist. Creating the Directory!${std}"
+	sudo mkdir -p $BACKUP_DIR
+fi
+
+echo ""
+echo "${blue}Directories are okay! Continuing the Installation!${std}"
+sleep 1
+
+echo ""
+echo ""
+echo "${blue}Checking if X11VNC is installed...${std}"
+if hash x11vnc 2>/dev/null
+then
+	echo ""
+	echo "${blue}X11VNC is already installed!${std}"
+else
+	echo ""
+	echo "${red}X11VNC is not installed. Installing it now!${std}"
+	sudo apt-get install x11vnc -y
+	sleep 1
+fi
+echo ""
+echo "${blue}X11VNC is installed and okay! Continuing Installation!${std}"
+sleep 1
+
+echo ""
+echo ""
+echo "${blue}Installing the RPI-KALIVNC-INSTALLER Repository...${std}"
+echo ""
+echo "${blue}Switching into the Installation Directory...${std}"
+echo "$INSTALL_DIR"
+cd $INSTALL_DIR
+echo "${blue}Downloading the RPI-KALIVNC-INSTALLER Repository...${std}"
+sudo git clone $INSTALLER_GIT_URL
+echo "${blue}Switching into the RPI-KALIVNC-INSTALLER Directory...${std}"
+echo "$KALIVNC_DIR"
+cd $KALIVNC_DIR
+echo "${blue}Making the RPI-KALIVNC-INSTALLER Scripts executable...${std}"
+sudo chmod 0755 rpi-kalivnc-installer
+sudo chmod 0755 rpi-kalivnc-uninstaller
+sudo chmod 0755 xstartup
+sudo chmod 0755 vncserver
+echo "${blue}Copying the rpi-kalivnc-uninstaller Script into $SCRIPTS_DIR ...${std}"
+sudo cp $UNINSTALL_BAK $UNINSTALL
+echo ""
+echo "${blue}Installation of the RPI-KALIVNC-INSTALLER Repository completed! Continuing the Installation!${std}"
+sleep 1
+
+echo ""
+echo ""
+echo "${blue}Setting up the VNC Server...${std}"
+echo ""
+echo "${green}Please enter a Password for the VNC Connection in the next step!${std}"
+echo "${green}The Password may have a maximum of 8 Characters! (VNC Server restriction)${std}"
+vncserver
+echo "${blue}Creating a Backup of $XSTARTUP ...${std}"
+sudo cp $XSTARTUP $XSTARTUP_BAK_DIR
+echo "${blue}Copying $XSTARTUP_BAK to $XSTARTUP ...${std}"
+sudo cp $XSTARTUP_BAK $XSTARTUP
+echo "${blue}Copying $INITD_BAK to $INITD ...${std}"
+sudo cp $INITD_BAK $INITD
+echo "${blue}Refreshing default Scripts...${std}"
+sudo update-rc.d vncserver defaults
+echo ""
+echo "${blue}VNC Server setup completed! Continuing the Installation!${std}"
+sleep 1
+
+echo ""
+echo ""
+echo "${blue}Cleaning up the Installation...${std}"
+echo ""
+echo "${blue}Checking if I'm executed within my GIT Directory...${std}"
+echo "$START_DIR"
+if [[ $START_DIR == *"rpi-kalivnc-installer" ]]
+then
+	echo ""
+	echo "${yellow}It seems I'm executed within my GIT Directory.${std}"
+	echo "${yellow}YOU WILL HAVE TO USE 'CD' AFTER I PURGED MY DIRECTORY!${std}"
+	echo "${red}Please reboot after the Installation!${std}"
+	echo ""
+	echo "${blue}Purging the Directory now...${std}"
+	echo "${blue}Installation Complete! Good Bye!${std}"
+	echo ""
+	sudo rm -d -r "$START_DIR"
+else
+	echo "${blue}It seems I'm run as Standalone. Deleting just myself!${std}"
+	echo ""
+	echo "${red}Please reboot after the Installation!${std}"
+	echo "${blue}Installation Complete! Good Bye!${std}"
+	echo ""
+	sudo rm "$START_DIR""/rpi-kalivnc-installer"
+fi
