@@ -46,10 +46,8 @@ Also delete's all associated Files.
 </br>
 </br>
 ATTENTION!!</br>
-</br>
 DO NOT install Kali VNC with the RPI-KALIVNC-AUTOINSTALLER and use the RPI-KALIVNC-INSTALLER</br>
 instead!!</br>
-</br>
 The RPI-KALIVNC-AUTOINSTALLER is just meant to be used by my RPI-SETUP-TOOL!</br>
 
 
