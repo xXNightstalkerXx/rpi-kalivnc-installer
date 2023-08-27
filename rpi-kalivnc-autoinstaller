@@ -171,5 +171,5 @@ else
 	echo "${red}Please reboot after the Installation!${std}"
 	echo "${blue}Installation Complete! Good Bye!${std}"
 	echo ""
-	sudo rm "$START_DIR""/rpi-kalivnc-installer"
+	sudo rm "$START_DIR""/rpi-kalivnc-autoinstaller"
 fi
