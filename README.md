@@ -1,3 +1,4 @@
+## DEPRECIATED (Debian Bullseye)
 # rpi-kalivnc-installer
 This Repository has some bash Scripts in it that download and setup the neccessary Files for the X11VNC Server on RPI Kali Linux.
 The Installer creates a new Directory where this Repository get's downloaded into.
@@ -17,7 +18,7 @@ Also feel free to contribute to this Repository and make it better :)
 ----------------------------------------------------------------
 # INSTALLATION
 
-    wget https://raw.githubusercontent.com/xXNightstalkerXx/rpi-kalivnc-installer/master/rpi-kalivnc-installer
+    wget https://raw.githubusercontent.com/xXNightstalkerXx/rpi-kalivnc-installer/Debian_Bullseye/rpi-kalivnc-installer
 Download the Kalivnc Installer Script with wget
 
     sudo chmod 0755 rpi-kalivnc-installer
