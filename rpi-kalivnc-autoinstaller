@@ -16,7 +16,8 @@ XSTARTUP_BAK=/etc/kalivnc/rpi-kalivnc-installer/xstartup
 XSTARTUP_BAK_DIR=/etc/kalivnc/backups/xstartup.bak
 
 #URL Declarations
-INSTALLER_GIT_URL=https://github.com/xXNightstalkerXx/rpi-kalivnc-installer.git
+GIT_BRANCH="main"
+INSTALLER_GIT_URL="https://github.com/xXNightstalkerXx/rpi-kalivnc-installer.git"
 
 #Color Declarations
 std=$(tput setaf 15)
@@ -113,7 +114,7 @@ echo "${blue}Switching into the Installation Directory...${std}"
 echo "$INSTALL_DIR"
 cd $INSTALL_DIR
 echo "${blue}Downloading the RPI-KALIVNC-INSTALLER Repository...${std}"
-sudo git clone $INSTALLER_GIT_URL
+sudo git clone -b "${GIT_BRANCH}" "${INSTALLER_GIT_URL}"
 echo "${blue}Switching into the RPI-KALIVNC-INSTALLER Directory...${std}"
 echo "$KALIVNC_DIR"
 cd $KALIVNC_DIR
