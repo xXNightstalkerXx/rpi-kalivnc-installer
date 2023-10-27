@@ -17,14 +17,13 @@ XSTARTUP_BAK_DIR=/etc/kalivnc/backups/xstartup.bak
 
 #URL Declarations
 INSTALLER_GIT_URL=https://github.com/xXNightstalkerXx/rpi-kalivnc-installer.git
-INSTALLER_WGET_URL=https://raw.github.com/xXNightstalkerXx/rpi-kalivnc-installer/master/rpi-kalivnc-installer
 
 #Color Declarations
 std=$(tput setaf 15)
 red=$(tput setaf 9 bold)
 green=$(tput setaf 10 bold)
 yellow=$(tput setaf 11 bold)
-pink=$(tput setaf 57)
+#pink=$(tput setaf 57)
 blue=$(tput setaf 27 bold)
 
 #Main Script
