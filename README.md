@@ -17,7 +17,7 @@ Also feel free to contribute to this Repository and make it better :)
 ----------------------------------------------------------------
 # INSTALLATION
 
-    wget https://raw.githubusercontent.com/xXNightstalkerXx/rpi-kalivnc-installer/master/rpi-kalivnc-installer
+    wget https://raw.githubusercontent.com/xXNightstalkerXx/rpi-vnc-installer/master/rpi-vnc-installer
 Download the Kalivnc Installer Script with wget
 
     sudo chmod 0755 rpi-kalivnc-installer
