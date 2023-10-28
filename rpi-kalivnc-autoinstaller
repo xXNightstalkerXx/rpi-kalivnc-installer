@@ -17,7 +17,7 @@ XSTARTUP_BAK_DIR=/etc/kalivnc/backups/xstartup.bak
 
 #URL Declarations
 GIT_BRANCH="Debian_Bullseye"
-INSTALLER_GIT_URL="https://github.com/xXNightstalkerXx/rpi-kalivnc-installer.git"
+INSTALLER_GIT_URL="https://github.com/xXNightstalkerXx/rpi-vnc-installer.git"
 
 #Color Declarations
 std=$(tput setaf 15)
