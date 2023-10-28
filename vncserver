@@ -9,7 +9,7 @@
 PATH="$PATH:/usr/X11R6/bin/"
 
 # The Username:Group that will run VNC
-export USER="kali"
+export USER=        # User should get inserted by installer Script
 #${RUNAS}
 
 # The display that VNC will use
@@ -25,7 +25,7 @@ GEOMETRY="1920x1080"
 #GEOMETRY="1280x1024"
 
 # The name that the VNC Desktop will have.
-NAME="kali_vnc"
+NAME=       # Name should get inserted by installer Script
 
 OPTIONS="-name ${NAME} -depth ${DEPTH} -geometry ${GEOMETRY} :${DISPLAY}"
 
@@ -34,12 +34,12 @@ OPTIONS="-name ${NAME} -depth ${DEPTH} -geometry ${GEOMETRY} :${DISPLAY}"
 case "$1" in
 start)
 log_action_begin_msg "Starting vncserver for user '${USER}' on localhost:${DISPLAY}"
-su ${USER} -c "/usr/bin/vncserver ${OPTIONS}"
+su "${USER}" -c "/usr/bin/vncserver ${OPTIONS}"
 ;;
 
 stop)
 log_action_begin_msg "Stoping vncserver for user '${USER}' on localhost:${DISPLAY}"
-su ${USER} -c "/usr/bin/vncserver -kill :${DISPLAY}"
+su "${USER}" -c "/usr/bin/vncserver -kill :${DISPLAY}"
 ;;
 
 restart)

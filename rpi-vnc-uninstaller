@@ -1,11 +1,11 @@
 #! /bin/bash
 
 #General Directory Declarations
-INSTALL_DIR=/etc/kalivnc
-SCRIPTS_DIR=/usr/bin
-VNC_SERVER_DIR=/home/kali/.vnc
-UNINSTALL=/usr/bin/rpi-kalivnc-uninstaller
-INITD=/etc/init.d/vncserver
+INSTALL_DIR="/etc/rpi-vnc"
+SCRIPTS_DIR="/usr/bin"
+VNC_SERVER_DIR="/home/$USER/.vnc"
+UNINSTALL="/usr/bin/rpi-vnc-uninstaller"
+INITD="/etc/init.d/vncserver"
 
 #Color Declarations
 std=$(tput setaf 15)
@@ -25,7 +25,7 @@ echo "${blue}//   //   //  //  //   //${std}"
 echo "${blue}//  //   //   // //   //${std}"
 echo "${blue}// //   //    ////   //${std}"
 echo "${blue}////   //     ///   ///////////${std}"
-echo "Kali X11 VNC Uninstaller by Nightstalker"
+echo "RPI X11 VNC Uninstaller by Nightstalker"
 echo ""
 echo ""
 echo "${blue}Checking OS...${std}"
@@ -54,7 +54,7 @@ echo ""
 echo "${blue}Purging X11 VNC from the System...${std}"
 sudo apt-get purge x11vnc -y
 echo "${blue}Deleting leftover User Directory $VNC_SERVER_DIR ...${std}"
-sudo rm -d -r $VNC_SERVER_DIR
+sudo rm -d -r "${VNC_SERVER_DIR}"
 echo "${blue}Deleting $INITD ...${std}"
 sudo rm $INITD
 echo ""
