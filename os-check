@@ -1,0 +1,82 @@
+#! /bin/bash
+
+# Color Declarations
+std=$(tput setaf 15)
+blue=$(tput setaf 27 bold)
+
+# System File Declarations
+OS_RELEASE_TXT="/etc/os-release"
+BOOKWORM_ISSUE_TXT="/boot/firmware/issue.txt"
+BULLSEYE_ISSUE_TXT="/boot/issue.txt"
+MODEL_TXT="/sys/firmware/devicetree/base/model"
+COMPATIBLE_TXT="/sys/firmware/devicetree/base/compatible"
+
+# Function Declarations
+get_system_data () {
+	RPI_STAGE=""
+	OP_SYSTEM=$(grep -E '^(NAME)=' $OS_RELEASE_TXT)
+	OP_SYSTEM=$(echo "$OP_SYSTEM" | grep -oP '"\K[^"]*(?=")')
+	OS_VERSION_NAME=$(grep -E '^(VERSION_CODENAME)=' $OS_RELEASE_TXT)
+	OS_VERSION_NAME=${OS_VERSION_NAME#*=}
+	OS_VERSION_ID=$(grep -E '^(VERSION_ID)=' $OS_RELEASE_TXT)
+	OS_VERSION_ID=$(echo "$OS_VERSION_ID" | grep -oP '"\K[^"]*(?=")')
+	OS_BIT=$(getconf LONG_BIT)
+	HW_MODEL=$(cat $MODEL_TXT | tr -d '\0')
+	HW_CHIP=$(grep -oaE '[^,]+$' $COMPATIBLE_TXT | tr -d '\0')
+	if [[ $OP_SYSTEM == *"Raspbian"* && $OS_VERSION_NAME == "bullseye" && $HW_MODEL == *"Raspberry"* ]]
+	then
+		RPI_STAGE=$(grep "stage" $BULLSEYE_ISSUE_TXT | grep -oaE '[^,]+$' | tr -d '\0' | tr -d '[:space:]')
+		if [[ $RPI_STAGE == "stage2" ]]
+		then
+			RPI_STAGE="Lite Version"
+		elif [[ $RPI_STAGE == "stage4" ]]
+		then
+			RPI_STAGE="GUI Lite Version"
+		elif [[ $RPI_STAGE == "stage5" ]]
+		then
+			RPI_STAGE="GUI Full Version"
+		fi
+	elif [[ $OP_SYSTEM == *"Debian"* && $OS_VERSION_NAME == "bookworm" && $HW_MODEL == *"Raspberry"* ]]
+	then
+		RPI_STAGE=$(grep "stage" $BOOKWORM_ISSUE_TXT | grep -oaE '[^,]+$' | tr -d '\0' | tr -d '[:space:]')
+		if [[ $RPI_STAGE == "stage2" ]]
+		then
+			RPI_STAGE="Lite Version"
+		elif [[ $RPI_STAGE == "stage4" ]]
+		then
+			RPI_STAGE="GUI Lite Version"
+		elif [[ $RPI_STAGE == "stage5" ]]
+		then
+			RPI_STAGE="GUI Full Version"
+		fi
+	fi
+}
+
+print_system_data () {
+	echo ""
+	printf "%s%-20s%s %-60s\n" "${blue}" "Operating System:" "${std}" "$OP_SYSTEM $OS_VERSION_ID ($OS_VERSION_NAME), $OS_BIT-bit"
+	if [[ $RPI_STAGE != "" ]]
+	then
+		printf "%s%-20s%s %-60s\n" "${blue}" "Raspberry OS:" "${std}" "$RPI_STAGE"
+	fi
+	printf "%s%-20s%s %-60s\n" "${blue}" "Hardware:" "${std}" "$HW_MODEL with $HW_CHIP Chipset"
+}
+
+# Main Script
+echo ""
+echo ""
+echo "${blue} ______   ______   ______   __  __   ______   ______   __  __${std}"
+echo "${blue}/\\  __ \\ /\\  ___\\ /\\  ___\\ /\\ \\_\\ \\ /\\  ___\\ /\\  ___\\ /\\ \\/ /${std}"
+echo "${blue}\\ \\ \\/\\ \\\\ \\___  \\\\ \\ \\____\\ \\  __ \\\\ \\  __\\ \\ \\ \\____\\ \\  _\"-.${std}"
+echo "${blue} \\ \\_____\\\\/\\_____\\\\ \\_____\\\\ \\_\\ \\_\\\\ \\_____\\\\ \\_____\\\\ \\_\\ \\_\\${std}"
+echo "${blue}  \\/_____/ \\/_____/ \\/_____/ \\/_/\\/_/ \\/_____/ \\/_____/ \\/_/\\/_/${std}"
+echo "OS-CHECK by Nightstalker"                                                                 
+echo ""
+echo ""
+echo "${blue}Checking OS...${std}"
+get_system_data
+print_system_data
+echo ""
+echo "${blue}Thanks for using OS-CHECK!${std}"
+echo ""
+exit 0
